@@ -43,6 +43,7 @@ export default function createGame() {
     state.players[playerId] = {
       x: playerX,
       y: playerY,
+      score: 0,
     };
 
     notifyAll({
@@ -88,14 +89,18 @@ export default function createGame() {
     });
   }
 
-  function removeFruit(command) {
+  function captureFruit(command) {
     const fruitId = command.fruitId;
+    const playerId = command.playerId;
 
     delete state.fruits[fruitId];
 
+    state.players[playerId].score += 1;
+
     notifyAll({
       type: "remove-fruit",
-      fruitId: fruitId,
+      fruitId,
+      playerId,
     });
   }
 
@@ -141,7 +146,7 @@ export default function createGame() {
     for (const fruitId in state.fruits) {
       const fruit = state.fruits[fruitId];
       if (player.x === fruit.x && player.y === fruit.y) {
-        removeFruit({ fruitId: fruitId });
+        captureFruit({ fruitId, playerId });
       }
     }
   }
@@ -154,7 +159,7 @@ export default function createGame() {
     addPlayer,
     removePlayer,
     addFruit,
-    removeFruit,
+    captureFruit,
     movePlayer,
   };
 }

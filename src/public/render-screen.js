@@ -1,6 +1,7 @@
 export default function renderScreen(
   screen,
   game,
+  score,
   requestAnimationFrame,
   currentPlayerId,
 ) {
@@ -8,8 +9,11 @@ export default function renderScreen(
   context.fillStyle = "white";
   context.clearRect(0, 0, 10, 10);
 
+  score.textContent = `Score: ${game.state.players[currentPlayerId]?.score}`;
+
   for (const playerId in game.state.players) {
     const player = game.state.players[playerId];
+
     context.fillStyle = "black";
     context.fillRect(player.x, player.y, 1, 1);
   }
@@ -28,6 +32,6 @@ export default function renderScreen(
   }
 
   requestAnimationFrame(() => {
-    renderScreen(screen, game, requestAnimationFrame, currentPlayerId);
+    renderScreen(screen, game, score, requestAnimationFrame, currentPlayerId);
   });
 }

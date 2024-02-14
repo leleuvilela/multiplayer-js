@@ -12,7 +12,9 @@ socket.on("connect", () => {
   console.log(`Player connected on client with id: ${playerId}`);
 
   const screen = document.getElementById("screen");
-  renderScreen(screen, game, requestAnimationFrame, playerId);
+  const score = document.getElementById("score");
+
+  renderScreen(screen, game, score, window.requestAnimationFrame, playerId);
 });
 
 socket.on("setup", (state) => {
@@ -51,5 +53,8 @@ socket.on("add-fruit", (command) => {
 
 socket.on("remove-fruit", (command) => {
   console.log(`Receiving remove-fruit command on client: ${command.fruitId}`);
-  game.removeFruit(command);
+  const playerId = socket.id;
+  if (playerId !== command.playerId) {
+    game.captureFruit(command);
+  }
 });
